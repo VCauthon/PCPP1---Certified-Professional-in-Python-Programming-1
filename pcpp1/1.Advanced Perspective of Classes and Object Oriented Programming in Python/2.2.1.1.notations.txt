@@ -1,0 +1,99 @@
+Inheritance and polymorphism — Inheritance is a pillar of OOP
+
+    Any object bound to a specific level of class hierarchy inherits all the traits (methods and attributes) defined inside any of the superclasses.
+
+    This means that inheritance is a way of building a new class, not from scratch, but by using an already defined repertoire of traits. The new class inherits (and this is the key) all the already existing equipment, but is able to add some new features if needed.
+
+    A very simple example of two-level inheritance is presented here:
+
+        class Vehicle:
+            pass
+
+        class LandVehicle(Vehicle):
+            pass
+
+        class TrackedVehicle(LandVehicle):
+            pass
+
+        All the presented classes are empty for now, as we're going to show you how the mutual relations between the super- and subclasses work.
+
+        We can say that:
+
+            the Vehicle class is the superclass for both the LandVehicle and TrackedVehicle classes;
+            the LandVehicle class is a subclass of Vehicle and a superclass of TrackedVehicle at the same time;
+            the TrackedVehicle class is a subclass of both the Vehicle and LandVehicle classes.
+
+Inheritance and polymorphism — Single inheritance vs. multiple inheritance
+
+    You can derive any new class from more than one previously defined class.
+
+    But multiple inheritance should be used with more prudence than single inheritance because:
+
+        - a single inheritance class is always simpler, safer, and easier to understand and maintain;
+        - multiple inheritance may make method overriding somewhat tricky; moreover, using the super() function can lead to ambiguity;
+        - it is highly probable that by implementing multiple inheritance you are violating the single responsibility principle;
+
+MRO — Method Resolution Order
+
+    The spectrum of issues possibly coming from multiple inheritance is illustrated by a classical problem named the diamond problem, or even the deadly diamond of death. 
+
+          > A <
+        B   |   C
+        ^ < D > ^
+    
+
+    The ambiguity that arises here is caused by the fact that class B and class C are inherited from superclass A, and class D is inherited from both classes B and C. If you want to call the method info(), which part of the code would be executed then?
+
+
+    According to the MRO. Can you guess the output of the code?
+
+        class A:
+            def info(self):
+                print('Class A')
+
+        class B(A):
+            def info(self):
+                print('Class B')
+
+        class C(A):
+            def info(self):
+                print('Class C')
+
+        class D(B, C):
+            pass
+
+        D().info()
+
+        Results:
+
+            - class D does not define the method info(), so Python has to look for it in the class hierarchy;
+            - class D is constructed in this order:
+            - the definition of class B is fetched;
+            - the definition of class C is fetched;
+            - Python finds the requested method in the class B definition and stops searching;
+            - Python executes the method.
+
+    MRO can report definition inconsistencies when a subtle change in the class D definition is introduced, which is possible when you work with complex class hierarchies.
+
+        class D(B, C) > class D(A, C)
+
+        This will create an inconsistencies error, because the class D is inherited a superclass A that C also inherits 
+
+Polymorphism
+
+    In Python, polymorphism is the provision of a single interface to objects of different types. In other words, it is the ability to create abstract methods from specific types in order to treat those types in a uniform way.
+
+    One way to carry out polymorphism is inheritance, when subclasses make use of base class methods, or override them. By combining both approaches, the programmer is given a very convenient way of creating applications, as:
+
+        - most of the code could be reused and only specific methods are implemented, which saves a lot of development time and improves code quality;
+        - the code is clearly structured;
+        - there is a uniform way of calling methods responsible for the same operations, implemented accordingly for the types.
+
+    Duck typing is a fancy name for the term describing an application of the duck test: "If it walks like a duck and it quacks like a duck, then it must be a duck", which determines whether an object can be used for a particular purpose. An object's suitability is determined by the presence of certain attributes, rather than by the type of the object itself.
+
+    Summary:
+
+        - polymorphism is used when different class objects share conceptually similar methods (but are not always inherited)
+        - polymorphism leverages clarity and expressiveness of the application design and development;
+        - when polymorphism is assumed, it is wise to handle exceptions that could pop up.
+
