@@ -4,7 +4,7 @@
     Level of difficulty > Medium
 
     Objectives > improving the student's skills in operating with special methods
-    
+
     Scenario
         Create a class representing a time interval;
             the class should implement its own method for addition, subtraction on time interval class objects;
